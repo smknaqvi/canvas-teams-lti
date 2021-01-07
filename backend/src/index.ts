@@ -4,8 +4,8 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import multer from "multer";
-import { CLIENT_ID, CLIENT_SECRET, HOST, PORT} from "./config/constants";
-import { router as authRoutes } from './routes/auth';
+import { CLIENT_ID, CLIENT_SECRET, HOST, PORT } from "./config/constants";
+import { router as authRoutes } from "./routes/auth";
 
 const upload = multer();
 const app = express();
@@ -13,8 +13,6 @@ const app = express();
 
 import passport from "passport";
 import { strategy } from "./strategy";
-
-
 
 passport.use(strategy);
 
@@ -34,11 +32,11 @@ passport.deserializeUser((id: any, done) => {
   done(null, id);
 });
 
-app.use('/auth', authRoutes);
+app.use("/auth", authRoutes);
 
 // app.use((err, req, res, next) => {
 //   try {
-//     const {  
+//     const {
 //       body: { launch_presentation_return_url },
 //     } = req;
 

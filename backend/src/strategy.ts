@@ -1,5 +1,5 @@
 import LTIStrategy from "passport-lti";
-import { CLIENT_ID, CLIENT_SECRET} from './config/constants';
+import { CLIENT_ID, CLIENT_SECRET } from "./config/constants";
 
 export const strategy = new LTIStrategy(
   {
@@ -15,4 +15,3 @@ export const strategy = new LTIStrategy(
     return done(null, "test");
   }
 );
-

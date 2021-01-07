@@ -1,56 +1,109 @@
-const path = require('path')
+// @TODO: configure environment variables
+// import dotenv from "dotenv";
+// dotenv.config();
+import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
+import multer from "multer";
 
-// Require Provider 
-const lti = require('ltijs').Provider
-const Database = require('ltijs-sequelize')
+const upload = multer();
+const app = express();
+const port = "3000";
 
-// Setup ltijs-sequelize using the same arguments as Sequelize's generic contructor
-const db = new Database('auth', 'lti', 'password', 
-  { 
-    host: 'localhost',
-    dialect: 'postgres',
-    logging: true 
-  })
+import passport from "passport";
+import { strategy } from "./strategy";
 
-// Setup provider
-lti.setup('kiw0nApfmyX3RDOUHAVB2VUnZsJUZjliNlwwz2V0YBDVMptsIXTSTEFR1ArpnwVF', // Key used to sign cookies and tokens
-  { 
-    plugin: db // Passing db object to plugin field
-  },
-  { // Options
-    appRoute: '/', loginRoute: '/login', // Optionally, specify some of the reserved routes
-    cookies: {
-      secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
-      sameSite: '' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+import axios from "axios";
+import qs from "qs";
+
+const CLIENT_ID = "10000000000004";
+const CLIENT_SECRET =
+  "SULCuWVF4E1foAy5GKm7z7hQxWUcOhLZjoBvzSdBKzN3OyNW776oaT1h69O65ozk";
+
+passport.use(strategy);
+
+// app.use(upload.array());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+  done(null, "test");
+});
+
+passport.deserializeUser((id: any, done) => {
+  done(null, id);
+});
+
+app.post("/", (req: Request, res: Response) => {
+  const redirectURL = new URL("http://localhost:8080/login/oauth2/auth");
+
+  redirectURL.searchParams.append("client_id", CLIENT_ID);
+  redirectURL.searchParams.append("response_type", "code");
+  redirectURL.searchParams.append("redirect_uri", "http://localhost:3000/done");
+  redirectURL.searchParams.append(
+    "scope",
+    "https://canvas.instructure.com/lti/feature_flags/scope/show"
+  );
+
+  res.redirect(redirectURL.toString());
+});
+
+app.get("/done", (req: Request, res: Response) => {
+  const token = axios({
+    method: "post",
+    url: "http://localhost:8080/login/oauth2/token",
+    data: qs.stringify({
+      client_id: CLIENT_ID,
+      redirect_uri: "http://localhost:3000/done",
+      client_secret: CLIENT_SECRET,
+      code: req.query.code,
+    }),
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
     },
-    devMode: true // Set DevMode to true if the testing platform is in a different domain and https is not being used
-  }
-)
+  }).then((res) => console.log(res));
 
-// Set lti launch callback
-lti.onConnect((token, req, res) => {
-  console.log(token)
-  console.log("We got here")
-  return res.send('It\'s alive!')
-})
+  res.redirect("/final");
+});
 
-const setup = async () => {
-    console.log("deployed");
-  // Deploy server and open connection to the database
-  await lti.deploy({ port: 3000 }) // Specifying port. Defaults to 3000
+app.get("/final", (req: Request, res: Response) => {
+  res.status(200).send(JSON.stringify("Hello world!"));
+});
 
-  // Register platform
-  await lti.registerPlatform({
-    url: 'https://canvas.instructure.com',
-    name: 'canvas',
-    clientId: '10000000000002',
-    authenticationEndpoint: 'http://127.0.0.2:8080/api/lti/authorize_redirect',
-    //authenticationEndpoint: 'https://canvas.test.instructure.com/api/lti/authorize_redirect',
-    //authenticationEndpoint: 'http://127.0.0.2:8080/login/oauth2/auth',
-    accesstokenEndpoint: 'http://127.0.0.2:8080/login/oauth2/token',
-    //authConfig: { method: 'JWK_SET', key: 'https://canvas.test.instructure.com/api/lti/security/jwks' }
-    authConfig: { method: 'JWK_SET', key: 'http://127.0.0.2:8080/api/lti/security/jwks' }
-  })
-}
+// app.use((err, req, res, next) => {
+//   try {
+//     const {
+//       body: { launch_presentation_return_url },
+//     } = req;
 
-setup()
+//     const redirectURL = new URL(launch_presentation_return_url);
+//     redirectURL.searchParams.append(
+//       "lti_msg",
+//       "Most things in here don't react well to bullets."
+//     );
+//     redirectURL.searchParams.append("lti_log", "One ping only.");
+
+//     // only send lti_msg or lti_errormsg, not both
+//     redirectURL.searchParams.append(
+//       "lti_errormsg",
+//       "Who's going to save you, Junior?!"
+//     );
+
+//     redirectURL.searchParams.append(
+//       "lti_errorlog",
+//       "The floor's on fire... see... *&* the chair."
+//     );
+
+//     res.redirect(redirectURL);
+//   } catch (error) {
+//     console.error(error);
+//     res.send(500, "Uh oh");
+//   }
+//   console.error(err);
+// });
+
+app.listen(port, () => {
+  console.log(`Listening to requests on http://localhost:${port}`);
+});

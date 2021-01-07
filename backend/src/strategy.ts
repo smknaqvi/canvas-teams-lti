@@ -1,11 +1,10 @@
-import { AnyPtrRecord } from "dns";
 import LTIStrategy from "passport-lti";
+import { CLIENT_ID, CLIENT_SECRET} from './config/constants';
 
 export const strategy = new LTIStrategy(
   {
-    consumerKey: "10000000000002",
-    consumerSecret:
-      "arRexzw9zOVdjil2iXTUO5GnN137FBK6K9R4yDyIB8Nyq1o49QuiYKQfHPqUYEiS",
+    consumerKey: CLIENT_ID,
+    consumerSecret: CLIENT_SECRET,
     // pass the req object to callback
     // passReqToCallback: true,
     // https://github.com/omsmith/ims-lti#nonce-stores
@@ -13,10 +12,7 @@ export const strategy = new LTIStrategy(
   },
   (lti: any, done: any) => {
     // LTI launch parameters
-    // console.dir(lti);
-    // Perform local authentication if necessary
     return done(null, "test");
   }
 );
 
-// module.exports = strategy;

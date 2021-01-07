@@ -4,20 +4,17 @@
 import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import multer from "multer";
+import { CLIENT_ID, CLIENT_SECRET, HOST, PORT} from "./config/constants";
+import { router as authRoutes } from './routes/auth';
 
 const upload = multer();
 const app = express();
-const port = "3000";
+// const port = "3000";
 
 import passport from "passport";
 import { strategy } from "./strategy";
 
-import axios from "axios";
-import qs from "qs";
 
-const CLIENT_ID = "10000000000004";
-const CLIENT_SECRET =
-  "SULCuWVF4E1foAy5GKm7z7hQxWUcOhLZjoBvzSdBKzN3OyNW776oaT1h69O65ozk";
 
 passport.use(strategy);
 
@@ -28,6 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// @TODO: Add db so users can be serialized to and from the session
 passport.serializeUser((user, done) => {
   done(null, "test");
 });
@@ -36,45 +34,11 @@ passport.deserializeUser((id: any, done) => {
   done(null, id);
 });
 
-app.post("/", (req: Request, res: Response) => {
-  const redirectURL = new URL("http://localhost:8080/login/oauth2/auth");
-
-  redirectURL.searchParams.append("client_id", CLIENT_ID);
-  redirectURL.searchParams.append("response_type", "code");
-  redirectURL.searchParams.append("redirect_uri", "http://localhost:3000/done");
-  redirectURL.searchParams.append(
-    "scope",
-    "https://canvas.instructure.com/lti/feature_flags/scope/show"
-  );
-
-  res.redirect(redirectURL.toString());
-});
-
-app.get("/done", (req: Request, res: Response) => {
-  const token = axios({
-    method: "post",
-    url: "http://localhost:8080/login/oauth2/token",
-    data: qs.stringify({
-      client_id: CLIENT_ID,
-      redirect_uri: "http://localhost:3000/done",
-      client_secret: CLIENT_SECRET,
-      code: req.query.code,
-    }),
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-    },
-  }).then((res) => console.log(res));
-
-  res.redirect("/final");
-});
-
-app.get("/final", (req: Request, res: Response) => {
-  res.status(200).send(JSON.stringify("Hello world!"));
-});
+app.use('/auth', authRoutes);
 
 // app.use((err, req, res, next) => {
 //   try {
-//     const {
+//     const {  
 //       body: { launch_presentation_return_url },
 //     } = req;
 
@@ -94,7 +58,7 @@ app.get("/final", (req: Request, res: Response) => {
 //     redirectURL.searchParams.append(
 //       "lti_errorlog",
 //       "The floor's on fire... see... *&* the chair."
-//     );
+//     );b5
 
 //     res.redirect(redirectURL);
 //   } catch (error) {
@@ -104,6 +68,6 @@ app.get("/final", (req: Request, res: Response) => {
 //   console.error(err);
 // });
 
-app.listen(port, () => {
-  console.log(`Listening to requests on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Listening to requests on ${HOST}`);
 });

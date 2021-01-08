@@ -1,22 +1,19 @@
 // @TODO: configure environment variables
 // import dotenv from "dotenv";
 // dotenv.config();
-import express, { Request, Response } from "express";
+import express from "express";
 import bodyParser from "body-parser";
-import multer from "multer";
-import { CLIENT_ID, CLIENT_SECRET, HOST, PORT } from "./config/constants";
-import { router as authRoutes } from "./routes/auth";
-
-const upload = multer();
-const app = express();
-// const port = "3000";
-
+import { authRoutes } from "./routes/authRoutes";
 import passport from "passport";
 import { strategy } from "./strategy";
+import { HOST, PORT } from "./config/constants";
+
+const app = express();
+
+// Middleware
 
 passport.use(strategy);
 
-// app.use(upload.array());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -24,14 +21,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // @TODO: Add db so users can be serialized to and from the session
-passport.serializeUser((user, done) => {
-  done(null, "test");
-});
+passport.serializeUser(
+  (user: Express.User, done: (err: any, user?: Express.User) => void) => {
+    done(null, "test");
+  }
+);
 
-passport.deserializeUser((id: any, done) => {
-  done(null, id);
-});
+passport.deserializeUser(
+  (id: number, done: (err: any, user?: Express.User) => void) => {
+    done(null, id);
+  }
+);
 
+// Routes
 app.use("/auth", authRoutes);
 
 // app.use((err, req, res, next) => {

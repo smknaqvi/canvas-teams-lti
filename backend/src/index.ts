@@ -36,38 +36,6 @@ passport.deserializeUser(
 // Routes
 app.use("/auth", authRoutes);
 
-// app.use((err, req, res, next) => {
-//   try {
-//     const {
-//       body: { launch_presentation_return_url },
-//     } = req;
-
-//     const redirectURL = new URL(launch_presentation_return_url);
-//     redirectURL.searchParams.append(
-//       "lti_msg",
-//       "Most things in here don't react well to bullets."
-//     );
-//     redirectURL.searchParams.append("lti_log", "One ping only.");
-
-//     // only send lti_msg or lti_errormsg, not both
-//     redirectURL.searchParams.append(
-//       "lti_errormsg",
-//       "Who's going to save you, Junior?!"
-//     );
-
-//     redirectURL.searchParams.append(
-//       "lti_errorlog",
-//       "The floor's on fire... see... *&* the chair."
-//     );b5
-
-//     res.redirect(redirectURL);
-//   } catch (error) {
-//     console.error(error);
-//     res.send(500, "Uh oh");
-//   }
-//   console.error(err);
-// });
-
 app.listen(PORT, () => {
   console.log(`Listening to requests on ${HOST}`);
 });

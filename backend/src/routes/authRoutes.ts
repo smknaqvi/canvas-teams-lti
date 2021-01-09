@@ -2,8 +2,8 @@ import axios from "axios";
 import express, { Request, Response } from "express";
 import qs from "qs";
 import {
-  CLIENT_ID,
-  CLIENT_SECRET,
+  DEV_CLIENT_ID,
+  DEV_CLIENT_SECRET,
   HOST_ADDRESS,
   CANVAS_ADDRESS,
 } from "../config/constants";
@@ -12,7 +12,7 @@ export const authRoutes = express.Router();
 authRoutes.route("/init").post((req: Request, res: Response) => {
   const redirectURL = new URL(`${CANVAS_ADDRESS}/login/oauth2/auth`);
 
-  redirectURL.searchParams.append("client_id", CLIENT_ID);
+  redirectURL.searchParams.append("client_id", DEV_CLIENT_ID);
   redirectURL.searchParams.append("response_type", "code");
   redirectURL.searchParams.append(
     "redirect_uri",
@@ -29,9 +29,9 @@ authRoutes.route("/redirect").get((req: Request, res: Response) => {
     method: "post",
     url: `${CANVAS_ADDRESS}/login/oauth2/token`,
     data: qs.stringify({
-      client_id: CLIENT_ID,
+      client_id: DEV_CLIENT_ID,
       redirect_uri: `${HOST_ADDRESS}/auth/redirect`,
-      client_secret: CLIENT_SECRET,
+      client_secret: DEV_CLIENT_SECRET,
       code: req.query.code,
     }),
     headers: {

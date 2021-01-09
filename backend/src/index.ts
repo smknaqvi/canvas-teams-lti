@@ -1,12 +1,10 @@
-// @TODO: configure environment variables
-// import dotenv from "dotenv";
-// dotenv.config();
+import "./config/config";
+import { HOST_ADDRESS, PORT } from "./config/constants";
 import express from "express";
 import bodyParser from "body-parser";
 import { authRoutes } from "./routes/authRoutes";
 import passport from "passport";
 import { strategy } from "./strategy";
-import { HOST, PORT } from "./config/constants";
 
 const app = express();
 
@@ -37,5 +35,5 @@ passport.deserializeUser(
 app.use("/auth", authRoutes);
 
 app.listen(PORT, () => {
-  console.log(`Listening to requests on ${HOST}`);
+  console.log(`Listening to requests on ${HOST_ADDRESS}`);
 });

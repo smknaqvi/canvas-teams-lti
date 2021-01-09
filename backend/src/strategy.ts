@@ -1,10 +1,10 @@
 import LTIStrategy from "passport-lti";
-import { CLIENT_ID, CLIENT_SECRET } from "./config/constants";
+import { DEV_CLIENT_ID, DEV_CLIENT_SECRET } from "./config/constants";
 
 export const strategy = new LTIStrategy(
   {
-    consumerKey: CLIENT_ID,
-    consumerSecret: CLIENT_SECRET,
+    consumerKey: DEV_CLIENT_ID,
+    consumerSecret: DEV_CLIENT_SECRET,
     // pass the req object to callback
     // passReqToCallback: true,
     // https://github.com/omsmith/ims-lti#nonce-stores

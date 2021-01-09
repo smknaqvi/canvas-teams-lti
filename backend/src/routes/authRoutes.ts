@@ -1,15 +1,23 @@
 import axios from "axios";
 import express, { Request, Response } from "express";
 import qs from "qs";
-import { CLIENT_ID, CLIENT_SECRET, HOST, CANVAS } from "../config/constants";
+import {
+  DEV_CLIENT_ID,
+  DEV_CLIENT_SECRET,
+  HOST_ADDRESS,
+  CANVAS_ADDRESS,
+} from "../config/constants";
 export const authRoutes = express.Router();
 
 authRoutes.route("/init").post((req: Request, res: Response) => {
-  const redirectURL = new URL(`${CANVAS}/login/oauth2/auth`);
+  const redirectURL = new URL(`${CANVAS_ADDRESS}/login/oauth2/auth`);
 
-  redirectURL.searchParams.append("client_id", CLIENT_ID);
+  redirectURL.searchParams.append("client_id", DEV_CLIENT_ID);
   redirectURL.searchParams.append("response_type", "code");
-  redirectURL.searchParams.append("redirect_uri", `${HOST}/auth/redirect`);
+  redirectURL.searchParams.append(
+    "redirect_uri",
+    `${HOST_ADDRESS}/auth/redirect`
+  );
   redirectURL.searchParams.append(
     "scope",
     "https://canvas.instructure.com/lti/feature_flags/scope/show"
@@ -19,11 +27,11 @@ authRoutes.route("/init").post((req: Request, res: Response) => {
 authRoutes.route("/redirect").get((req: Request, res: Response) => {
   const token = axios({
     method: "post",
-    url: `${CANVAS}/login/oauth2/token`,
+    url: `${CANVAS_ADDRESS}/login/oauth2/token`,
     data: qs.stringify({
-      client_id: CLIENT_ID,
-      redirect_uri: `${HOST}/auth/redirect`,
-      client_secret: CLIENT_SECRET,
+      client_id: DEV_CLIENT_ID,
+      redirect_uri: `${HOST_ADDRESS}/auth/redirect`,
+      client_secret: DEV_CLIENT_SECRET,
       code: req.query.code,
     }),
     headers: {

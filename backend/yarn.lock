@@ -199,13 +199,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/ltijs@4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@types/ltijs/-/ltijs-4.0.1.tgz#67a71f37663a466df72a534daeab0b96edd04dd5"
-  integrity sha512-sWrL3vKfjV4GU3xhcAuDEaA60B7PYj43Ii2YfEJHWz0BeAwFVpQvgwpRI70woJkUxT6B+n1TQotdJuKWt5Oekw==
-  dependencies:
-    "@types/express" "*"
-
 "@types/mime@*":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-2.0.3.tgz#c893b73721db73699943bfc3653b1deb7faa4a3a"

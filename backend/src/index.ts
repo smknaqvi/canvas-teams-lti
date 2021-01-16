@@ -38,11 +38,10 @@ const lti = Provider.setup(
     appUrl: "/",
     loginUrl: "/login",
     cookies: {
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "none",
     },
-    // devMode: true,
-    ltiaas: true,
+    devMode: false,
   }
 );
 
@@ -52,19 +51,19 @@ lti.onConnect((token: any, req: Request, res: Response) => {
   return res.send("It's alive!");
 });
 
-lti.onInvalidToken(async (req: Request, res: Response, next) => {
-  console.log(req);
+lti.onInvalidToken(async (req: Request, res: Response, next: () => any) => {
+  console.log("QUERY", req.query, "PARAMS", req.params);
   return res.status(401).send(res.locals.err);
 });
 const setup = async () => {
   await lti.deploy({ port: Number(PORT) });
   await lti.registerPlatform({
-    url: "https://canvas.instructure.com",
+    url: "http://dogs.docker",
     name: "Platform Name",
     clientId: `${DEV_CLIENT_ID}`,
     authenticationEndpoint: `${CANVAS_ADDRESS}/api/lti/authorize_redirect`,
     accesstokenEndpoint: `${CANVAS_ADDRESS}/login/oauth2/token`,
-    authConfig: { method: "JWK_KEY", key: `${PRIVATE_KEY}` },
+    authConfig: { method: "JWK_SET", key: `${PRIVATE_KEY}` },
   });
 };
 

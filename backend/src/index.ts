@@ -46,8 +46,9 @@ const lti = Provider.setup(
 );
 
 // @TODO: use Idtoken type for token
-lti.onConnect((token: any, req: Request, res: Response) => {
-  console.log(token);
+lti.onConnect(async (token: any, req: Request, res: Response) => {
+  //  const response = await lti.NamesAndRoles.getMembers(res.locals.token);
+  // console.log(response); // Gets context members
   return res.send("It's alive!");
 });
 

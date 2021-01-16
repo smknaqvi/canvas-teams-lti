@@ -55,14 +55,14 @@ Key pair is located in constants.ts
                         "placement": "link_selection",
                         "message_type": "LtiResourceLinkRequest",
                         "windowTarget": "_blank",
-                        "target_link_uri": "http://127.0.0.1:3000/auth/redirect"
+                        "target_link_uri": "http://127.0.0.1:3000/"
                     },
                     {
                         "enabled": true,
                         "placement": "course_navigation",
                         "message_type": "LtiResourceLinkRequest",
                         "windowTarget": "_blank",
-                        "target_link_uri": "http://127.0.0.1:3000/auth/redirect"
+                        "target_link_uri": "http://127.0.0.1:3000/"
                     }
                 ]
             },

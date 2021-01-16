@@ -1,39 +1,65 @@
 import "./config/config";
-import { HOST_ADDRESS, PORT } from "./config/constants";
-import express from "express";
-import bodyParser from "body-parser";
-import { authRoutes } from "./routes/authRoutes";
-import passport from "passport";
-import { strategy } from "./strategy";
+import {
+  CANVAS_ADDRESS,
+  DEV_CLIENT_ID,
+  DEV_LTI_KEY,
+  PORT,
+} from "./config/constants";
+import { Request, Response } from "express";
 
-const app = express();
+import { Provider } from "ltijs";
+// may be able to use the types from sequelize, for now ignore
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Database = require("ltijs-sequelize");
 
-// Middleware
+// @TODO: configure database and abstract constants
+const db = new Database(
+  "test",
+  "user",
+  "password",
 
-passport.use(strategy);
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-// @TODO: Add db so users can be serialized to and from the session
-passport.serializeUser(
-  (user: Express.User, done: (err: any, user?: Express.User) => void) => {
-    done(null, "test");
+  {
+    host: "localhost",
+    dialect: "postgres",
+    logging: true,
   }
 );
 
-passport.deserializeUser(
-  (id: number, done: (err: any, user?: Express.User) => void) => {
-    done(null, id);
+// compiles incorrectly
+const lti = new Provider(
+  `${DEV_LTI_KEY}`,
+  {
+    // shouldn't have to specify url here, might have accessed property incorrectly
+    url: db.host,
+    plugin: db,
+  },
+  {
+    appUrl: "/",
+    loginUrl: "/login",
+    cookies: {
+      secure: false,
+      sameSite: "",
+    },
+    https: false,
   }
 );
 
-// Routes
-app.use("/auth", authRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Listening to requests on ${HOST_ADDRESS}`);
+// @TODO: use Idtoken type for token
+lti.onConnect((token: any, req: Request, res: Response) => {
+  console.log(token);
+  return res.send("It's alive!");
 });
+
+const setup = async () => {
+  await lti.deploy({ port: Number(PORT) });
+  await lti.registerPlatform({
+    url: "https://canvas.instructure.com",
+    name: "Platform Name",
+    clientId: `${DEV_CLIENT_ID}`,
+    authenticationEndpoint: `${CANVAS_ADDRESS}/api/lti/authorized_redirect`,
+    accesstokenEndpoint: `${CANVAS_ADDRESS}/login/oauth2/token`,
+    authConfig: { method: "JWK_KEY", key: "https://platform.url/keyset" },
+  });
+};
+
+setup();

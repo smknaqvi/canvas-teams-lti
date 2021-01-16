@@ -3,7 +3,7 @@ import express, { Request, Response } from "express";
 import qs from "qs";
 import {
   DEV_CLIENT_ID,
-  DEV_CLIENT_SECRET,
+  DEV_LTI_KEY,
   HOST_ADDRESS,
   CANVAS_ADDRESS,
 } from "../config/constants";
@@ -31,7 +31,7 @@ authRoutes.route("/redirect").get((req: Request, res: Response) => {
     data: qs.stringify({
       client_id: DEV_CLIENT_ID,
       redirect_uri: `${HOST_ADDRESS}/auth/redirect`,
-      client_secret: DEV_CLIENT_SECRET,
+      client_secret: DEV_LTI_KEY,
       code: req.query.code,
     }),
     headers: {

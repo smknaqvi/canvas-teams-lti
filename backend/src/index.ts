@@ -38,10 +38,11 @@ const lti = Provider.setup(
     appUrl: "/",
     loginUrl: "/login",
     cookies: {
-      secure: true,
-      sameSite: "None",
+      secure: false,
+      sameSite: "Lax",
     },
-    https: false,
+    // devMode: true,
+    ltiaas: true,
   }
 );
 
@@ -51,6 +52,10 @@ lti.onConnect((token: any, req: Request, res: Response) => {
   return res.send("It's alive!");
 });
 
+lti.onInvalidToken(async (req: Request, res: Response, next) => {
+  console.log(req);
+  return res.status(401).send(res.locals.err);
+});
 const setup = async () => {
   await lti.deploy({ port: Number(PORT) });
   await lti.registerPlatform({

@@ -1,71 +1,46 @@
 import "./config/config";
 import {
-  CANVAS_ADDRESS,
-  DB_PASS,
-  DB_TABLE,
-  DB_USER,
-  DEV_CLIENT_ID,
-  DEV_LTI_KEY,
+  AUTH0_CLIENT_ID,
+  AUTH0_CLIENT_SECRET,
+  AUTH0_DOMAIN,
+  HOST_ADDRESS,
   PORT,
-  PRIVATE_KEY,
 } from "./config/constants";
-import { Request, Response } from "express";
-// @TODO: make exception only for provider.setup
-import { Provider } from "ltijs";
-// may be able to use the types from sequelize, for now ignore
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const Database = require("ltijs-sequelize");
+import express, { Request, Response } from "express";
 
-// @TODO: configure database and abstract constants
-const db = new Database(
-  `${DB_TABLE}`,
-  `${DB_USER}`,
-  `${DB_PASS}`,
+import { auth, OpenidRequest } from "express-openid-connect";
 
-  {
-    host: "localhost",
-    dialect: "postgres",
-    logging: true,
-  }
-);
+const app = express();
 
-const lti = Provider.setup(
-  `${DEV_LTI_KEY}`,
-  {
-    plugin: db,
-  },
-  {
-    appUrl: "/",
-    loginUrl: "/login",
-    cookies: {
-      secure: true,
-      sameSite: "none",
-    },
-    devMode: false,
-  }
-);
-
-// @TODO: use Idtoken type for token
-lti.onConnect(async (token: any, req: Request, res: Response) => {
-  //  const response = await lti.NamesAndRoles.getMembers(res.locals.token);
-  // console.log(response); // Gets context members
-  return res.send("It's alive!");
-});
-
-lti.onInvalidToken(async (req: Request, res: Response, next: () => any) => {
-  console.log("QUERY", req.query, "PARAMS", req.params);
-  return res.status(401).send(res.locals.err);
-});
-const setup = async () => {
-  await lti.deploy({ port: Number(PORT) });
-  await lti.registerPlatform({
-    url: "http://dogs.docker",
-    name: "Platform Name",
-    clientId: `${DEV_CLIENT_ID}`,
-    authenticationEndpoint: `${CANVAS_ADDRESS}/api/lti/authorize_redirect`,
-    accesstokenEndpoint: `${CANVAS_ADDRESS}/login/oauth2/token`,
-    authConfig: { method: "JWK_SET", key: `${PRIVATE_KEY}` },
-  });
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: `${AUTH0_CLIENT_SECRET}`,
+  baseURL: `${HOST_ADDRESS}`,
+  clientID: `${AUTH0_CLIENT_ID}`,
+  issuerBaseURL: `${AUTH0_DOMAIN}`,
 };
 
-setup();
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+// TODO: Run server over https://, see https://auth0.com/docs/libraries/secure-local-development
+app.get("/", (req: Request, res: Response) => {
+  res.send(
+    // compiler doesn't let us declare req as OpenidRequest even though it inherits from Request
+    ((req as unknown) as OpenidRequest).oidc.isAuthenticated()
+      ? "Logged in"
+      : "Logged out"
+  );
+});
+
+app.listen(PORT, () => {
+  console.log(`Listening to requests on ${HOST_ADDRESS}`);
+});
+
+/*
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
+*/

@@ -1,6 +1,6 @@
 ### Configuration
 
-Configure caddy in order to serve the application https as explained [here](https://auth0.com/docs/libraries/secure-local-development#running-your-application-behind-a-proxy).
+Configure caddy in order to serve the application over https as explained [here](https://auth0.com/docs/libraries/secure-local-development#running-your-application-behind-a-proxy).
 
 Run caddy as follows,
 

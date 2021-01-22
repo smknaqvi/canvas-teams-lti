@@ -1,23 +1,23 @@
 
--- DROP TABLE IF EXISTS projects;
+/*
+
+DROP TABLE IF EXISTS bridgeProjectUsers;
 
 
--- DROP TABLE IF EXISTS bridgeProjectUsers;
+DROP TABLE IF EXISTS bridgeGroupUsers;
 
 
--- DROP TABLE IF EXISTS bridgeGroupUsers;
+DROP TABLE IF EXISTS roles;
 
 
--- DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS projectProfiles;
 
 
--- DROP TABLE IF EXISTS profile;
+DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS projects;
 
-
--- DROP TABLE IF EXISTS users;
-
-
--- DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS users;
+*/
 
 
 CREATE TABLE projects(projectId int PRIMARY KEY, name text NOT NULL);
@@ -64,38 +64,3 @@ CREATE TABLE bridgeGroupUsers(
   userid int REFERENCES users (userId)
 );
 
-/*
-CREATE FUNCTION enforceGroupLimit(userNumber int, projectNumber int) RETURNS boolean AS $success$ DECLARE numberOfGroups int;
-
-
-BEGIN
-SELECT
-  count(userId) INTO numberOfGroups
-WHERE
-  groupId IN (
-    SELECT
-      groupId
-    FROM
-      groups
-    WHERE
-      groups.projectId = enforcerGroupLimit.projectNumber
-  )
-FROM
-  joinGroupUsers
-WHERE
-  joinGroupUsers.userId = enforceGroupLimit.userNumber;
-
-
-RETURN numberOfGroups = 1;
-
-
-END;
-
-
-$success$ LANGUAGE plpgsql;
-
-
-CREATE Trigger groupEnforcement before
-INSERT
-  ON bridgeGroupUsers;
-  */

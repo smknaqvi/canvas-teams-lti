@@ -42,7 +42,8 @@ CREATE TABLE groups(
 CREATE TABLE projectProfiles (
   userId int REFERENCES users (userId),
   projectId int REFERENCES projects (projectId),
-  biography text NOT NULL
+  biography text NOT NULL, 
+  profileImage text
 );
 
 

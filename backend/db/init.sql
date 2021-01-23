@@ -1,5 +1,4 @@
 
-/*
 
 DROP TABLE IF EXISTS bridgeProjectUsers;
 
@@ -14,10 +13,10 @@ DROP TABLE IF EXISTS projectProfiles;
 
 
 DROP TABLE IF EXISTS groups;
+
 DROP TABLE IF EXISTS projects;
 
 DROP TABLE IF EXISTS users;
-*/
 
 
 CREATE TABLE projects(projectId int PRIMARY KEY, name text NOT NULL);

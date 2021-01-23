@@ -1,5 +1,7 @@
 ### Configuration
 
+Run db/init.sql to initialize database.
+
 Configure caddy in order to serve the application over https as explained [here](https://auth0.com/docs/libraries/secure-local-development#running-your-application-behind-a-proxy).
 
 Run caddy as follows,

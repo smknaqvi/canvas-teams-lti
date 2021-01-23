@@ -12,7 +12,7 @@ const app = express();
 app.use(auth(AUTH_CONFIG));
 
 // routes
-app.use("/", authRoutes);
+app.use("", authRoutes);
 
 app.set("trust proxy", true);
 

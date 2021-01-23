@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc && concurrently \"tsc -w\" \"nodemon -d 100 ./dist/index.js\"",
+    "dev": "concurrently \"tsc -w\" \"nodemon ./dist/index.js\"",
     "build": "tsc"
   },
   "keywords": [],

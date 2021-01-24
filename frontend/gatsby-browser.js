@@ -6,7 +6,7 @@ const onRedirectCallback = (appState) => {
   navigate(appState?.returnTo || '/', { replace: true })
 }
 
-export const wrapRootElement = ({ element }) => {
+exports.wrapRootElement = ({ element }) => {
   const AUTH0_DOMAIN = process.env.AUTH0_DOMAIN || ''
   const AUTH0_CLIENTID = process.env.AUTH0_CLIENTID || ''
   const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE || ''

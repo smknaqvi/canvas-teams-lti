@@ -1,83 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { Router, RouteComponentProps } from '@reach/router'
-import {
-  login,
-  isAuthenticated,
-  getProfile,
-  getAccessToken,
-  logout,
-} from '../utils/auth'
-import { Link } from 'gatsby'
-import { silentAuth } from '../utils/auth'
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
 import axios from 'axios'
 
-interface UserInterface {
-  name?: string
-}
-
-interface HomeProps {
-  user: UserInterface
-}
-
-const RouterPage = (
-  props: { pageComponent: JSX.Element } & RouteComponentProps
-) => props.pageComponent
-
-const Home = ({ user }: HomeProps) => {
-  const [msg, setMsg] = useState('loading')
-
-  axios
-    .get('http://127.0.0.1:3000/api/test', {
-      headers: {
-        Authorization: `Bearer ${getAccessToken()}`,
-        // 'Access-Control-Allow-Origin': '*',
-      },
-    })
-    .then((res) => setMsg(res.data))
-  return (
-    <p>
-      Hi, {user.name ? user.name : 'friend'}! {msg}
-    </p>
-  )
-}
-const Settings = () => <p>Settings</p>
-const Billing = () => <p>Billing</p>
-
-const Account = () => {
+const AccountPage = () => {
+  // This is temporary set up just to show how this works
+  // We will abstratct the api and token handling later
+  const { user, getAccessTokenSilently, logout } = useAuth0()
+  const [msg, setMsg] = useState('loading...')
   useEffect(() => {
-    return localStorage.setItem('isLoggedIn', 'false')
-  }, [])
-
-  if (!isAuthenticated()) {
-    login()
-    return <p>Redirecting to login...</p>
-  }
-
-  const user = getProfile()
+    getAccessTokenSilently({ audience: process.env.AUTH0_AUDIENCE })
+      .then((token) =>
+        axios.get('http://127.0.0.1:3000/api/test', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // 'Access-Control-Allow-Origin': '*',
+          },
+        })
+      )
+      .then(({ data }) => setMsg(data))
+  }, [getAccessTokenSilently])
 
   return (
-    <>
-      <nav>
-        <Link to="/account">Home</Link>{' '}
-        <Link to="/account/settings">Settings</Link>{' '}
-        <Link to="/account/billing">Billing</Link>{' '}
-        <a
-          href="#logout"
-          onClick={(e) => {
-            logout()
-            e.preventDefault()
-          }}
-        >
-          Log Out
-        </a>
-      </nav>
-      <Router>
-        <RouterPage path="/account" pageComponent={<Home user={user} />} />
-        <RouterPage path="/account/settings" pageComponent={<Settings />} />
-        <RouterPage path="/account/billing" pageComponent={<Billing />} />
-      </Router>
-    </>
+    <ul>
+      <li>Name: {user.nickname}</li>
+      <li>E-mail: {user.email}</li>
+      <li>Message: {msg}</li>
+      <a onClick={() => logout({ returnTo: window.location.origin })}>
+        Log Out
+      </a>
+    </ul>
   )
 }
 
-export default Account
+export default withAuthenticationRequired(AccountPage)

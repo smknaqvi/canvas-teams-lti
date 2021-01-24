@@ -44,6 +44,10 @@ const Settings = () => <p>Settings</p>
 const Billing = () => <p>Billing</p>
 
 const Account = () => {
+  useEffect(() => {
+    return localStorage.setItem('isLoggedIn', 'false')
+  }, [])
+
   if (!isAuthenticated()) {
     login()
     return <p>Redirecting to login...</p>

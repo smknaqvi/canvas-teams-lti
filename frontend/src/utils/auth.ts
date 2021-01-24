@@ -6,7 +6,7 @@ interface UserInterface {
 }
 
 interface TokenInterface {
-  accessToken: boolean
+  accessToken: boolean | string
   idToken: boolean | string
   expiresAt: boolean | number
 }
@@ -18,6 +18,7 @@ const auth = isBrowser
       domain: process.env.AUTH0_DOMAIN || '',
       clientID: process.env.AUTH0_CLIENTID || '',
       redirectUri: process.env.AUTH0_CALLBACK || '',
+      audience: 'teams_backend',
       responseType: 'token id_token',
       scope: 'openid profile email',
     })
@@ -44,7 +45,6 @@ export const login = () => {
   if (!isBrowser) {
     return
   }
-
   /* @ts-expect-error */
   auth.authorize()
 }
@@ -53,7 +53,7 @@ export const login = () => {
 const setSession = (cb = () => {}) => (
   err: unknown,
   authResult: {
-    accessToken: boolean
+    accessToken: boolean | string
     idToken: boolean
     expiresIn: number
     idTokenPayload: unknown
@@ -90,8 +90,8 @@ export const getProfile: () => UserInterface = () => {
   return user
 }
 
-export const getIdToken = () => {
-  return tokens.idToken
+export const getAccessToken = () => {
+  return tokens.accessToken
 }
 
 export const silentAuth = (callback: () => any) => {

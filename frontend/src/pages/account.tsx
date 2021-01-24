@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Router, RouteComponentProps } from '@reach/router'
 import {
   login,
   isAuthenticated,
   getProfile,
-  getIdToken,
+  getAccessToken,
   logout,
 } from '../utils/auth'
 import { Link } from 'gatsby'
-
+import { silentAuth } from '../utils/auth'
 import axios from 'axios'
 
 interface UserInterface {
@@ -24,23 +24,26 @@ const RouterPage = (
 ) => props.pageComponent
 
 const Home = ({ user }: HomeProps) => {
-  return <p>Hi, {user.name ? user.name : 'friend'}!</p>
+  const [msg, setMsg] = useState('loading')
+
+  axios
+    .get('http://127.0.0.1:3000/api/test', {
+      headers: {
+        Authorization: `Bearer ${getAccessToken()}`,
+        // 'Access-Control-Allow-Origin': '*',
+      },
+    })
+    .then((res) => setMsg(res.data))
+  return (
+    <p>
+      Hi, {user.name ? user.name : 'friend'}! {msg}
+    </p>
+  )
 }
 const Settings = () => <p>Settings</p>
 const Billing = () => <p>Billing</p>
 
 const Account = () => {
-  let res = ''
-  console.log(getIdToken())
-  axios
-    .get('http://127.0.0.1:3000/api/test', {
-      headers: {
-        Authorization: `Bearer ${getIdToken()}`,
-        // 'Access-Control-Allow-Origin': '*',
-      },
-    })
-    .then((res) => console.log(res))
-
   if (!isAuthenticated()) {
     login()
     return <p>Redirecting to login...</p>

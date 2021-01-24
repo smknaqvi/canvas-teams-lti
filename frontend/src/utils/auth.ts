@@ -7,7 +7,7 @@ interface UserInterface {
 
 interface TokenInterface {
   accessToken: boolean
-  idToken: boolean
+  idToken: boolean | string
   expiresAt: boolean | number
 }
 
@@ -88,4 +88,20 @@ export const handleAuthentication = () => {
 
 export const getProfile: () => UserInterface = () => {
   return user
+}
+
+export const getIdToken = () => {
+  return tokens.idToken
+}
+
+export const silentAuth = (callback: () => any) => {
+  if (!isAuthenticated()) return callback()
+  /* @ts-expect-error */
+  auth.checkSession({}, setSession(callback))
+}
+
+export const logout = () => {
+  localStorage.setItem('isLoggedIn', 'false')
+  /* @ts-expect-error */
+  auth.logout()
 }

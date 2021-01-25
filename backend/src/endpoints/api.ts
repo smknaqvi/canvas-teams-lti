@@ -1,7 +1,9 @@
-import express, { Request, Response } from "express";
+import { Request, Response, Router } from "express";
 
-export const apiEndpoints = express.Router();
+const router = Router();
 
-apiEndpoints.route("/test").get((req: Request, res: Response) => {
+router.route("/test").get((req: Request, res: Response) => {
   res.send("Success");
 });
+
+export default router;

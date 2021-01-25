@@ -1,5 +1,4 @@
 import jwt from "express-jwt";
-
 import jwks from "jwks-rsa";
 import { AUTH0_AUDIENCE, AUTH0_ISSUER, AUTH0_JWKS } from "../config/constants";
 

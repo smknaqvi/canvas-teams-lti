@@ -1,11 +1,11 @@
 import "./config/config";
-
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
-import { HOST_ADDRESS, PORT } from "./config/constants";
-import { apiEndpoints } from "./endpoints/api";
 import { jwtCheck } from "./middleware/auth";
+import { HOST_ADDRESS, PORT } from "./config/constants";
+import apiRouter from "./endpoints/api";
+
 const app = express();
 
 // middleware
@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(jwtCheck);
 
 // endpoints
-app.use("/api", apiEndpoints);
+app.use("/api", apiRouter);
 
 app.listen(PORT, () => {
   console.log(`Listening to requests on ${HOST_ADDRESS}:${PORT}`);

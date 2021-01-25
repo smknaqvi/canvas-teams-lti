@@ -1,21 +1,22 @@
 import "./config/config";
-
-import { AUTH_CONFIG, HOST_ADDRESS, PORT } from "./config/constants";
+import cors from "cors";
 import express from "express";
-import { auth } from "express-openid-connect";
-import { authRoutes } from "./routes/authRoutes";
+import bodyParser from "body-parser";
+import { jwtCheck } from "./middleware/auth";
+import { HOST_ADDRESS, PORT } from "./config/constants";
+import apiRouter from "./routes/apiRoutes";
 
 const app = express();
 
 // middleware
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(AUTH_CONFIG));
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(jwtCheck);
 
-// routes
-app.use("", authRoutes);
-
-app.set("trust proxy", true);
+// endpoints
+app.use("/api", apiRouter);
 
 app.listen(PORT, () => {
-  console.log(`Listening to requests on ${HOST_ADDRESS}`);
+  console.log(`Listening to requests on ${HOST_ADDRESS}:${PORT}`);
 });

@@ -4,7 +4,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { jwtCheck } from "./middleware/auth";
 import { HOST_ADDRESS, PORT } from "./config/constants";
-import apiRouter from "./endpoints/api";
+import apiRouter from "./routes/apiRoutes";
 
 const app = express();
 

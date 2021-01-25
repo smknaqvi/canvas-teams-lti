@@ -1,2 +1,7 @@
-export const PORT = process.env.PORT;
-export const HOST_ADDRESS = `${process.env.HOST_ADDRESS}:${PORT}`;
+export const {
+  PORT,
+  HOST_ADDRESS,
+  AUTH0_JWKS,
+  AUTH0_ISSUER,
+  AUTH0_AUDIENCE,
+} = process.env;

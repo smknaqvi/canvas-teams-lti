@@ -3,7 +3,7 @@ const Auth0Provider = require('@auth0/auth0-react').Auth0Provider
 const navigate = require('gatsby').navigate
 
 const onRedirectCallback = (appState) => {
-  navigate(appState?.returnTo || '/', { replace: true })
+  navigate(appState?.returnTo || '/account', { replace: true })
 }
 
 exports.wrapRootElement = ({ element }) => {
@@ -15,7 +15,7 @@ exports.wrapRootElement = ({ element }) => {
     <Auth0Provider
       domain={AUTH0_DOMAIN}
       clientId={AUTH0_CLIENTID}
-      redirectUri={window.location.origin}
+      redirectUri={`${window.location.origin}/account`}
       audience={AUTH0_AUDIENCE}
       onRedirectCallback={onRedirectCallback}
     >

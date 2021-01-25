@@ -14,7 +14,15 @@ const IndexPage = () => {
       <p>Hello World</p>
       {isAuthenticated && <Link to="/account">Go to your account</Link>}
       {!isAuthenticated ? (
-        <a onClick={loginWithRedirect}>Log In</a>
+        <a
+          onClick={() =>
+            loginWithRedirect({
+              redirectUri: `${window.location.origin}/account`,
+            })
+          }
+        >
+          Log In
+        </a>
       ) : (
         <a onClick={() => logout({ returnTo: window.location.origin })}>
           Log Out

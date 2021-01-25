@@ -13,7 +13,6 @@ const AccountPage = () => {
         axios.get('http://127.0.0.1:3000/api/test', {
           headers: {
             Authorization: `Bearer ${token}`,
-            // 'Access-Control-Allow-Origin': '*',
           },
         })
       )

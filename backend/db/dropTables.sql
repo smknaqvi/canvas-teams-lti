@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS roles;
+
+
+DROP TABLE IF EXISTS bridge_project_profiles;
+
+
+DROP TABLE IF EXISTS groups;
+
+
+DROP TABLE IF EXISTS projects;
+
+
+DROP TABLE IF EXISTS users;

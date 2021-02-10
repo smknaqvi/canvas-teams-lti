@@ -2,26 +2,23 @@ import { Column, Entity, Index, OneToMany } from "typeorm";
 // import { Bridgeprojectprofiles } from "./Bridgeprojectprofiles";
 // import { Bridgeprojectusers } from "./Bridgeprojectusers";
 import { Groups } from "./Groups";
-import { BridgeProjectProfiles } from "./ProjectProfiles";
+import { UsersToProjects } from "./ProjectProfiles";
 
-@Index("projects_pkey", ["projectid"], { unique: true })
+//@Index("projects_pkey", ["projectid"], { unique: true })
 @Entity("projects", { schema: "public" })
 export class Projects {
-  @Column("integer", { primary: true, name: "projectid" })
-  projectid!: number;
+  @Column("integer", { primary: true, name: "projectId" })
+  projectId!: number;
 
   @Column("text", { name: "name" })
   name!: string;
 
-  @Column("text", { name: "projectdescription" })
-  projectdescription!: string;
+  @Column("text", { name: "projectDescription" })
+  projectDescription!: string;
 
-  @OneToMany(() => Groups, (groups) => groups.project)
+  @OneToMany(() => Groups, (groups) => groups.projectId)
   groups!: Groups[];
 
-  @OneToMany(
-    () => BridgeProjectProfiles,
-    (bridgeProjectProfiles) => bridgeProjectProfiles.user
-  )
-  public bridgeProjectProfiles!: BridgeProjectProfiles[];
+  @OneToMany(() => UsersToProjects, (usersToProjects) => usersToProjects.user)
+  public usersToProjects!: UsersToProjects[];
 }

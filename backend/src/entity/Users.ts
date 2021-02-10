@@ -7,40 +7,40 @@ import {
   OneToMany,
 } from "typeorm";
 import { Groups } from "./Groups";
-import { BridgeProjectProfiles } from "./ProjectProfiles";
+import { UsersToProjects } from "./ProjectProfiles";
 // import { Bridgegroupusers } from "./Bridgegroupusers";
 // import { Bridgeprojectprofiles } from "./Bridgeprojectprofiles";
 // import { Bridgeprojectusers } from "./Bridgeprojectusers";
 
 // @Index("users_email_key", ["email"], { unique: true })
-@Index("users_pkey", ["userid"], { unique: true })
+//@Index("users_pkey", ["userid"], { unique: true })
 @Entity("users", { schema: "public" })
 export class Users {
   @Column("integer", { primary: true, name: "userId" })
-  userid!: number;
+  userId!: number;
 
-  @Column("text", { name: "firstname" })
-  firstname!: string;
+  @Column("text", { name: "firstName" })
+  firstName!: string;
 
-  @Column("text", { name: "lastname" })
-  lastname!: string;
+  @Column("text", { name: "lastName" })
+  lastName!: string;
 
-  @Column("text", { name: "profileimage" })
-  profileimage!: string | null;
+  @Column("text", { name: "profileImage" })
+  profileImage!: string | null;
 
   @Column("text", { name: "email" })
   email!: string;
 
-  @Column("boolean", { name: "emailverified" })
-  emailverified!: boolean | null;
+  //@Column("boolean", { name: "emailVerified" })
+  //emailVerified!: boolean | null;
 
   @ManyToMany(() => Groups)
   @JoinTable()
   groupId!: Groups[];
 
   @OneToMany(
-    () => BridgeProjectProfiles,
-    (bridgeProjectProfiles) => bridgeProjectProfiles.project
+    () => UsersToProjects,
+    (usersToProjects) => usersToProjects.project
   )
-  public bridgeProjectProfiles!: BridgeProjectProfiles[];
+  public usersToProjects!: UsersToProjects[];
 }

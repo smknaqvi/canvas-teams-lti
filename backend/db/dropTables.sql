@@ -1,7 +1,13 @@
 DROP TABLE IF EXISTS roles CASCADE;
 
 
+DROP TABLE IF EXISTS users_group_id_groups;
+
+
 DROP TABLE IF EXISTS "Roles" CASCADE;
+
+
+DROP TABLE IF EXISTS users_to_projects;
 
 
 DROP TABLE IF EXISTS bridge_project_profiles CASCADE;

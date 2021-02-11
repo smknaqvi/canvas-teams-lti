@@ -14,7 +14,7 @@ import { UsersToProjects } from "./ProjectProfiles";
 
 // @Index("users_email_key", ["email"], { unique: true })
 //@Index("users_pkey", ["userid"], { unique: true })
-@Entity("users", { schema: "public" })
+@Entity("users")
 export class Users {
   @Column("integer", { primary: true, name: "userId" })
   userId!: number;
@@ -38,9 +38,9 @@ export class Users {
   @JoinTable()
   groupId!: Groups[];
 
-  @OneToMany(
-    () => UsersToProjects,
-    (usersToProjects) => usersToProjects.project
-  )
-  public usersToProjects!: UsersToProjects[];
+  // @OneToMany(
+  //   () => UsersToProjects,
+  //   (usersToProjects) => usersToProjects.project
+  // )
+  // public usersToProjects!: UsersToProjects[];
 }

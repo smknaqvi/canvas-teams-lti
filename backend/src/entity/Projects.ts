@@ -16,9 +16,12 @@ export class Projects {
   @Column("text", { name: "projectDescription" })
   projectDescription!: string;
 
+  @Column("integer", { name: "groupLimit" })
+  groupLimit!: number;
+
   @OneToMany(() => Groups, (groups) => groups.projectId)
   groups!: Groups[];
 
-  @OneToMany(() => UsersToProjects, (usersToProjects) => usersToProjects.user)
-  public usersToProjects!: UsersToProjects[];
+  // @OneToMany(() => UsersToProjects, (usersToProjects) => usersToProjects.user)
+  // public usersToProjects!: UsersToProjects[];
 }

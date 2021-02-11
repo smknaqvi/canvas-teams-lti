@@ -4,6 +4,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Projects } from "./Projects";
@@ -13,24 +14,31 @@ import { Users } from "./Users";
 @Entity("users_to_projects")
 export class UsersToProjects {
   @PrimaryGeneratedColumn("rowid")
-  rowId!: string;
+  rowId!: number;
 
-  @Column("text", { name: "biography" })
+  @PrimaryColumn("text", { name: "biography" })
   biography!: string;
 
-  @Column("integer", { name: "userId" })
-  public userId!: number;
+  @PrimaryColumn("integer", { name: "userId" })
+  userId!: number;
 
   @Column("integer", { name: "projectId" })
-  public projectId!: number;
+  projectId!: number;
 
-  // @OneToOne(() => Roles)
-  // @JoinColumn()
-  // roleId!: Roles;
-
-  @ManyToOne(() => Users, (user) => user.usersToProjects)
-  public user!: Users;
-
-  @ManyToOne(() => Projects, (project) => project.usersToProjects)
-  public project!: Projects;
+  @OneToOne(() => Users, (user) => user.userId, { primary: true })
+  @JoinColumn({ name: "userId" })
+  user!: Users;
+  @OneToOne(() => Projects, (project) => project.projectId, { primary: true })
+  @JoinColumn({ name: "projectId" })
+  project!: Projects;
 }
+
+// @OneToOne(() => Roles)
+// @JoinColumn()
+// roleId!: Roles;
+
+// @ManyToOne(() => Users, (user) => user.usersToProjects)
+// public user!: Users;
+
+// @ManyToOne(() => Projects, (project) => project.usersToProjects)
+// public project!: Projects;

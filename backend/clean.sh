@@ -6,4 +6,17 @@ PASS=$(grep TYPEORM_PASSWORD .env | cut -d '=' -f2 | xargs)
 
 yarn run cleanBuild
 $(PGPASSWORD="$PASS" psql -h "$HOST" -d "$DB" -U "$USER" -q -f db/dropTables.sql)
-yarn run synchronize
+    
+TYPEORM_SYNCHRONIZE=true node --title=synchronizeServer ./dist/index.js
+  
+  
+sleep 2
+pkill synchronizeServer
+
+$(PGPASSWORD="$PASS" psql -h "$HOST" -d "$DB" -U "$USER" -q -f db/rolesInit.sql)
+
+yarn run dev
+
+
+
+

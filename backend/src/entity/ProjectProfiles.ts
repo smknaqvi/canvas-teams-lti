@@ -1,11 +1,13 @@
 import {
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Projects } from "./Projects";
-// import { Roles } from "./Roles";
+import { Roles } from "./Roles";
 import { Users } from "./Users";
 
 @Entity("users_to_projects")
@@ -17,9 +19,9 @@ export class UsersToProjects {
   biography!: string;
 
   // @TODO Add roles
-  // @OneToOne(() => Roles)
-  // @JoinColumn()
-  // roleId!: Roles;
+  @OneToOne(() => Roles)
+  @JoinColumn()
+  public roleId!: Roles;
 
   @ManyToOne(() => Users, (user) => user.usersToProjects)
   public user!: Users;

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { UsersToProjects } from "../entity/ProjectProfiles";
 import { Projects } from "../entity/Projects";
+import { Roles } from "../entity/Roles";
 import { Users } from "../entity/Users";
 
 // class UserController {
@@ -80,12 +81,16 @@ export const addUserToProject = async (
     response.status(400).send(`${projectId} does not exist!`);
   }
   const bridgeRepository = getRepository(UsersToProjects);
+  const roleRepository = getRepository(Roles);
+  const participant = await roleRepository.findOne(1);
+
   try {
     await bridgeRepository.save(
       bridgeRepository.create({
         biography: request.body.biography,
         project: project,
         user: user,
+        roleId: participant,
       })
     );
 

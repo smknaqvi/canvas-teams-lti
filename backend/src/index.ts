@@ -20,19 +20,10 @@ app.use(bodyParser.json());
 
 // endpoints
 app.use("/api", apiRouter);
-createConnection().then(async (connection) => {
+createConnection().then(async () => {
   app.listen(PORT, () => {
     console.log(`Listening to requests on ${HOST_ADDRESS}:${PORT}`);
   });
-  // Test connection
-  // await connection.manager.save(
-  //   connection.manager.create(Users, {
-  //     userid: 913,
-  //     firstname: "hello",
-  //     lastname: "random",
-  //     profileimage: "randoam",
-  //     email: "teaaastzxzdssczx",
-  //     emailverified: true,
-  //   })
-  // );
 });
+
+process.on("SIGINT", () => process.exit(1));

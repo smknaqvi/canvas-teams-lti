@@ -7,8 +7,7 @@
     "dev": "concurrently \"tsc -w\" \"ts-node ./dist/index.js\"",
     "build": "tsc",
     "cleanBuild": "rm -rf dist/entity && tsc",
-    "synchronize": "TYPEORM_SYNCHRONIZE=true ts-node ./dist/index.js ",
-    "cleanDatabase": "psql -h TYPEORM_HOST -d $TYPEORM_DATABASE -U $USER -f db/dropTables.sql"
+    "synchronize": "TYPEORM_SYNCHRONIZE=true ts-node ./dist/index.js "
 
   },
   "keywords": [],

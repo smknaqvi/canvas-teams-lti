@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Connection, getConnection, getRepository } from "typeorm";
+import { getRepository } from "typeorm";
 import { UsersToProjects } from "../entity/ProjectProfiles";
 import { Projects } from "../entity/Projects";
 import { Users } from "../entity/Users";
@@ -9,11 +9,12 @@ import { Users } from "../entity/Users";
 //   constructor() {
 //     this.connection = getConnection();
 //   }
-// how to declare function below?
+// @TODO Determined use of connection
 export const registerUser = async (req: Request, res: Response) => {
-  const connection = getConnection();
+  // const connection = getConnection();
 
-  const repository = connection.getRepository(Users);
+  // const repository = connection.getRepository(Users);
+  const repository = getRepository(Users);
   try {
     const user = await repository.findOne(req.body.user_id);
 
@@ -83,14 +84,13 @@ export const addUserToProject = async (
     await bridgeRepository.save(
       bridgeRepository.create({
         biography: request.body.biography,
-        userId: userId,
-        projectId: projectId,
+        project: project,
+        user: user,
       })
     );
-    // user!.usersToProjects = [projectId
+
     response.status(200).send("success");
   } catch (e) {
     response.status(400).send(`error`);
   }
 };
-// export default UserContoroller;

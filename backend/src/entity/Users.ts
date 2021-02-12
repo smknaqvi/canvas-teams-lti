@@ -1,17 +1,9 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-} from "typeorm";
-import { Groups } from "./Groups";
-import { UsersToProjects } from "./ProjectProfiles";
-// import { Bridgegroupusers } from "./Bridgegroupusers";
-// import { Bridgeprojectprofiles } from "./Bridgeprojectprofiles";
-// import { Bridgeprojectusers } from "./Bridgeprojectusers";
+import { Column, Entity, OneToMany } from "typeorm";
 
+import { UsersToProjects } from "./ProjectProfiles";
+import { UsersToGroups } from "./UsersToGroups";
+
+// @TODO Determine use of Index
 // @Index("users_email_key", ["email"], { unique: true })
 //@Index("users_pkey", ["userid"], { unique: true })
 @Entity("users")
@@ -34,13 +26,12 @@ export class Users {
   //@Column("boolean", { name: "emailVerified" })
   //emailVerified!: boolean | null;
 
-  @ManyToMany(() => Groups)
-  @JoinTable()
-  groupId!: Groups[];
+  @OneToMany(() => UsersToGroups, (usersToGroups) => usersToGroups.group)
+  public usersToGroups!: UsersToGroups[];
 
-  // @OneToMany(
-  //   () => UsersToProjects,
-  //   (usersToProjects) => usersToProjects.project
-  // )
-  // public usersToProjects!: UsersToProjects[];
+  @OneToMany(
+    () => UsersToProjects,
+    (usersToProjects) => usersToProjects.project
+  )
+  public usersToProjects!: UsersToProjects[];
 }

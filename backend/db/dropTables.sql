@@ -37,4 +37,4 @@ DROP TABLE IF EXISTS "Users" CASCADE;
 DROP TABLE IF EXISTS "user";
 
 
-DROP TABLE IF EXISTS users_group_id__groups CASCADE;
+DROP TABLE IF EXISTS users_group_id_groups CASCADE;

@@ -1,6 +1,4 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
-// import { Bridgeprojectprofiles } from "./Bridgeprojectprofiles";
-// import { Bridgeprojectusers } from "./Bridgeprojectusers";
 import { Groups } from "./Groups";
 import { UsersToProjects } from "./ProjectProfiles";
 
@@ -22,6 +20,6 @@ export class Projects {
   @OneToMany(() => Groups, (groups) => groups.projectId)
   groups!: Groups[];
 
-  // @OneToMany(() => UsersToProjects, (usersToProjects) => usersToProjects.user)
-  // public usersToProjects!: UsersToProjects[];
+  @OneToMany(() => UsersToProjects, (usersToProjects) => usersToProjects.user)
+  public usersToProjects!: UsersToProjects[];
 }

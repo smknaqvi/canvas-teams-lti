@@ -6,6 +6,6 @@ cp .env.example .env
 
 ### Configuration
 
-Set synchronize to true in environment variables for first run to generate tables
+Run `yarn run synchronize` on first run to generate database tables.
 
-After any changes to entities, recompile or else old entities will be used by typeorm
+After changing entities run ./clean.sh to regenerate entities, wipe and update database.

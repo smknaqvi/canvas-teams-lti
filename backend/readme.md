@@ -8,4 +8,4 @@ cp .env.example .env
 
 Run `./clean.sh` to configure everything after setting up `.env`.
 
-After changing entities run ./clean.sh to regenerate entities, wipe and update database.
+After changing entities run `./clean.sh` to regenerate entities, wipe and update database.

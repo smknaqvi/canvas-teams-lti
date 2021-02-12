@@ -1,15 +1,5 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from "typeorm";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Groups } from "./Groups";
-import { Projects } from "./Projects";
-import { Roles } from "./Roles";
 import { Users } from "./Users";
 
 @Entity("users_to_groups")

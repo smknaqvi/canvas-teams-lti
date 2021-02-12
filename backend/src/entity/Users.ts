@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from "typeorm";
 
-import { UsersToProjects } from "./ProjectProfiles";
+import { UsersToProjects } from "./UsersToProjects";
 import { UsersToGroups } from "./UsersToGroups";
 
 // @TODO Determine use of Index
@@ -23,6 +23,7 @@ export class Users {
   @Column("text", { name: "email" })
   email!: string;
 
+  // @TODO decide what to do with this
   //@Column("boolean", { name: "emailVerified" })
   //emailVerified!: boolean | null;
 

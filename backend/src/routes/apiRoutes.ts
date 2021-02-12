@@ -5,9 +5,10 @@ import {
   addUserToProject,
   createProject,
 } from "../controller/UserController";
-// import UserController from "../controller/UserController";
+
 const router = Router();
 
+// @TODO determine better route names
 router.route("/test").get((req: Request, res: Response) => {
   console.log(req.headers);
   res.send("Success");

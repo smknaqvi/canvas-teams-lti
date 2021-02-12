@@ -1,6 +1,6 @@
 import { Column, Entity, Index, OneToMany } from "typeorm";
 import { Groups } from "./Groups";
-import { UsersToProjects } from "./ProjectProfiles";
+import { UsersToProjects } from "./UsersToProjects";
 
 //@Index("projects_pkey", ["projectid"], { unique: true })
 @Entity("projects", { schema: "public" })

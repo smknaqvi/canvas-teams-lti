@@ -1,20 +1,16 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { UsersToProjects } from "../entity/ProjectProfiles";
+import { UsersToProjects } from "../entity/UsersToProjects";
 import { Projects } from "../entity/Projects";
 import { Roles } from "../entity/Roles";
 import { Users } from "../entity/Users";
 
-// class UserController {
-//   protected connection: Connection;
-//   constructor() {
-//     this.connection = getConnection();
-//   }
-// @TODO Determined use of connection
-export const registerUser = async (req: Request, res: Response) => {
-  // const connection = getConnection();
+// @TODO request parsing and validation
+// @TODO functions can be broken up further, currently exist to demonstrate functionality
 
-  // const repository = connection.getRepository(Users);
+// linter does not like missing return type of these functions
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const registerUser = async (req: Request, res: Response) => {
   const repository = getRepository(Users);
   try {
     const user = await repository.findOne(req.body.user_id);
@@ -42,6 +38,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const createProject = async (request: Request, response: Response) => {
   const repository = getRepository(Projects);
   try {
@@ -64,6 +61,7 @@ export const createProject = async (request: Request, response: Response) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const addUserToProject = async (
   request: Request,
   response: Response

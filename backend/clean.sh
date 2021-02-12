@@ -15,7 +15,7 @@ pkill synchronizeServer
 
 $(PGPASSWORD="$PASS" psql -h "$HOST" -d "$DB" -U "$USER" -q -f db/rolesInit.sql)
 
-yarn run dev
+
 
 
 

@@ -8,7 +8,6 @@ import { Users } from "../entity/Users";
 // @TODO request parsing and validation
 // @TODO functions can be broken up further, currently exist to demonstrate functionality
 
-// linter does not like missing return type of these functions
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const registerUser = async (req: Request, res: Response) => {
   const repository = getRepository(Users);

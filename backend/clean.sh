@@ -8,8 +8,7 @@ yarn run cleanBuild
 $(PGPASSWORD="$PASS" psql -h "$HOST" -d "$DB" -U "$USER" -q -f db/dropTables.sql)
     
 TYPEORM_SYNCHRONIZE=true node --title=synchronizeServer ./dist/index.js
-  
-  
+
 sleep 2
 pkill synchronizeServer
 

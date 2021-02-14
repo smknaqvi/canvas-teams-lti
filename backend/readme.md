@@ -1,15 +1,17 @@
-### Configuration
-
-Run db/init.sql to initialize database.
-
 ### Environment Variables
 
-Sample .env below with AUTH0 specific settings
+```
+cp .env.example .env
+```
 
-```
-PORT=
-HOST_ADDRESS=
-AUTH0_JWKS=
-AUTH0_ISSUER=
-AUTH0_AUDIENCE=
-```
+### Configuration
+
+`yarn install`
+
+Configure environment variables. 
+
+Build once, `tsc`. 
+
+Run `./clean.sh` to configure everything. 
+
+After changing entities run `./clean.sh` to regenerate entities, wipe and update database.

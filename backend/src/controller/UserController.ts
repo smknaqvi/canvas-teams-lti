@@ -4,35 +4,39 @@ import { UsersToProjects } from "../entity/UsersToProjects";
 import { Projects } from "../entity/Projects";
 import { Roles } from "../entity/Roles";
 import { Users } from "../entity/Users";
+import { validateOrReject } from "class-validator";
 
 // @TODO request parsing and validation
 // @TODO functions can be broken up further, currently exist to demonstrate functionality
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (request: Request, response: Response) => {
   const repository = getRepository(Users);
+  const newUser = repository.create(request.body as Users);
   try {
-    const user = await repository.findOne(req.body.user_id);
+    await validateOrReject(newUser);
+  } catch (errors) {
+    response.status(400).send(`Invalid body. Errors: ${errors}`);
+    return;
+  }
+
+  try {
+    const user = await repository.findOne(newUser.userId);
 
     if (user) {
-      res.status(200).send("User exists");
+      const projects = await getRepository(UsersToProjects).find({
+        userId: newUser.userId,
+      });
+      response.status(200).json(projects);
       return;
     } else {
-      await repository.save(
-        repository.create({
-          email: req.body.email,
-          firstName: req.body.given_name,
-          lastName: req.body.family_name,
-          //   emailverified: req.body.email_verified,
-          profileImage: req.body.picture,
-          userId: req.body.user_id,
-        })
-      );
-      res.status(200).send("User created");
+      await repository.save(newUser);
+
+      response.status(200).json("");
       return;
     }
   } catch (e) {
-    res.status(400).send("error");
+    response.status(400).send("error");
     return;
   }
 };
@@ -40,19 +44,19 @@ export const registerUser = async (req: Request, res: Response) => {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const createProject = async (request: Request, response: Response) => {
   const repository = getRepository(Projects);
+  const newProject = repository.create(request.body as Projects);
+  try {
+    await validateOrReject(newProject);
+  } catch (errors) {
+    response.status(400).send(`Invalid body. Errors: ${errors}`);
+    return;
+  }
   try {
     const projectId = await repository.findOne(request.body.projectId);
     if (projectId) {
       response.status(400).send(`${request.body.projectId} already exists!`);
     } else {
-      await repository.save(
-        repository.create({
-          projectId: request.body.projectId,
-          name: request.body.name,
-          projectDescription: request.body.projectDescription,
-          groupLimit: request.body.groupLimit,
-        })
-      );
+      await repository.save(newProject);
       response.status(200).send("Project created");
     }
   } catch (e) {
@@ -80,16 +84,20 @@ export const addUserToProject = async (
   const bridgeRepository = getRepository(UsersToProjects);
   const roleRepository = getRepository(Roles);
   const participant = await roleRepository.findOne(1);
-
+  const newUserProject = await bridgeRepository.create(
+    request.body as UsersToProjects
+  );
+  if (participant != undefined) {
+    newUserProject.roleId = participant;
+  }
   try {
-    await bridgeRepository.save(
-      bridgeRepository.create({
-        biography: request.body.biography,
-        project: project,
-        user: user,
-        roleId: participant,
-      })
-    );
+    await validateOrReject(newUserProject);
+  } catch (errors) {
+    response.status(400).send(`Invalid body. Errors: ${errors}`);
+    return;
+  }
+  try {
+    await bridgeRepository.save(newUserProject);
 
     response.status(200).send("success");
   } catch (e) {

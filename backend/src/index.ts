@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// app.use(jwtCheck);
+app.use(jwtCheck);
 
 // endpoints
 app.use("/api", apiRouter);
@@ -27,4 +27,3 @@ createConnection().then(async () => {
 });
 
 process.on("SIGINT", () => process.exit(1));
-process.on("uncaughtException", () => process.exit(1));

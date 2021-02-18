@@ -13,8 +13,8 @@ router.route("/test").get((req: Request, res: Response) => {
   console.log(req.headers);
   res.send("Success");
 });
-router.route("/register").post(registerUser);
-router.route("/createProject").post(createProject);
+router.route("/user").post(registerUser);
+router.route("/project").post(createProject);
 router.route("/enrolUser").post(addUserToProject);
 
 export default router;

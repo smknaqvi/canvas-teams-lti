@@ -8,7 +8,6 @@
     "build": "tsc",
     "cleanBuild": "rm -rf dist/entity && tsc",
     "synchronize": "TYPEORM_SYNCHRONIZE=true ts-node ./dist/index.js "
-
   },
   "keywords": [],
   "author": "",
@@ -32,6 +31,7 @@
   },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "class-validator": "^0.13.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
